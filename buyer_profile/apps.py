@@ -6,4 +6,3 @@ class BuyerProfileConfig(AppConfig):
 
     def ready(self):
         import buyer_profile.signals
-        print("ready")
