@@ -4,11 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <title>
-
+        {% block title %}
+        {% endblock title %}
     </title>
 </head>
 
 <body>
+    {% if message %}
+        {{message}}
+    {% endif %}
 
+    {% if messages %}
+        {% for message in messages %}
+            {{message}}
+        {% endfor %}
+    {% endif %}
+
+    {% block message %}
+    {% endblock message %}
+
+    {% block body %}
+    {% endblock body %}
 </body>
 </html>
