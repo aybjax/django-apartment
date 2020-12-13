@@ -10,13 +10,13 @@
 </head>
 
 <body>
-    {% if message %}
-        {{message}}
-    {% endif %}
-
     {% if messages %}
         {% for message in messages %}
-            {{message}}
+            {% if message.tags == "success" %}
+                {{message}} <br/>
+            {% else %}
+                message is not success: {{message.tags}}
+            {% endif %}
         {% endfor %}
     {% endif %}
 

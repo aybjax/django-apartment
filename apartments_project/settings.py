@@ -40,7 +40,6 @@ INSTALLED_APPS = [
 
     #apps
     'seller_profile',
-    'apartment',
     'buyer_profile.apps.BuyerProfileConfig',  # have to make this for signal to be registered
     'user_extended',
 ]

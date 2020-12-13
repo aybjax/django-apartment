@@ -22,7 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('seller/', include('seller_profile.urls')),
     path('buyer/', include('buyer_profile.urls')),
-    path('apartment/', include('apartment.urls')),
     path('', include('user_extended.urls')),
 ]
 
