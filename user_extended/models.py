@@ -6,7 +6,8 @@ from . import constants
 class Extension(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Associated user',
                                 null=True, blank=False, related_name='extension')
-    city = models.CharField(max_length=2, choices=constants.PROFILE_CITY,
+    city = models.CharField(max_length=2,
+                            choices=constants.PROFILE_CITY,
                             default=constants.PROFILE_CITY_DEFAULT_VALUE)
     image = models.ImageField(upload_to='profile_image', default='default_image/default.jpeg')
 

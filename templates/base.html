@@ -14,8 +14,10 @@
         {% for message in messages %}
             {% if message.tags == "success" %}
                 {{message}} <br/>
+            {% elif message.tags == "error" %}
+                error: -> {{message}} <br/>
             {% else %}
-                message is not success: {{message.tags}}
+                message is not success/error: {{message.tags}}
             {% endif %}
         {% endfor %}
     {% endif %}

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Apartment
+from .models import Apartment, ApartmentImage
 
 
 class RegisterApartment(forms.ModelForm):
@@ -8,5 +8,7 @@ class RegisterApartment(forms.ModelForm):
         exclude = ['owner']
 
 
-# class ApartmentImageForm(forms.Form):
-
+class ApartmentImageForm(forms.ModelForm):
+    class Meta:
+        model = ApartmentImage
+        fields = ['image']

@@ -36,7 +36,16 @@ class Apartment(models.Model):
 class ApartmentImage(models.Model):
     apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE,
                                   related_name="images")
-    image = models.ImageField(upload_to='apartment_images/')
+    image = models.ImageField(blank=True, null=True)
+
+    def __str__(self):
+        try:
+            image = self.image.url
+        except:
+            image = "no"
+        return f'image: id = %d, of apartment: %s ||||| url: %s' % (
+                self.pk, self.apartment, image
+        )
 
     def getSellerPathForImage(self):
         self.apartment.getSellerPathForImage()

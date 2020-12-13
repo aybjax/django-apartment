@@ -14,7 +14,7 @@ def registerUser(request: HttpRequest, *args, **kwargs) -> HttpResponse:
 
     if request.method == 'POST':
         userForm = forms.UserForm(request.POST)
-        extensionForm = forms.UserExtendedForm(request.POST)
+        extensionForm = forms.UserExtendedForm(request.POST, request.FILES)
 
         if all([
                 userForm.is_valid(), extensionForm.is_valid(),
@@ -22,14 +22,28 @@ def registerUser(request: HttpRequest, *args, **kwargs) -> HttpResponse:
             user = userForm.save()
             extension = extensionForm.save(commit=False)
             extension.user = user
+
             extension.save()
-            # print("saved")
-            # context['message'] = "Account %s is successfully created" % user.username
+
             successMessage = "Account %s is successfully created" % user.username
+
             messages.success(request, successMessage)
             loginUser(request)
+
             return redirect('seller:register-apartment')
             # return reverse('seller:register-apartment') - method POST and POST data are saved
+
+        else:
+            messages.error(request, "form not valid")
+
+            if not userForm.is_valid():
+                messages.error(request, "user form not valid")
+                messages.error(request, userForm)
+
+            if not extensionForm.is_valid():
+                messages.error(request, "extension form not valid")
+                messages.error(request, extensionForm)
+
     else:
         userForm = forms.UserForm()
         extensionForm = forms.UserExtendedForm()

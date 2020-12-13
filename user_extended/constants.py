@@ -6,4 +6,4 @@ PROFILE_CITY = [
     ('mx', 'mvxosranskh'),
 ]
 
-PROFILE_CITY_DEFAULT_VALUE = PROFILE_CITY[0][0]
+PROFILE_CITY_DEFAULT_VALUE = 'qr'

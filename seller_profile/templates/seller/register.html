@@ -9,10 +9,15 @@
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
 
-        <input type="hidden" name="numPhoto" value="{{request.session.numPhoto}}">
-        <input type="file" name="photo1">
-        <input type="file" name="photo2">
+        {# <input type="hidden" name="numPhoto" value="{{request.session.numPhoto}}"> #}
+        {# <input type="file" name="photo1"> #}
+        {# <input type="file" name="photo2"> #}
     <br/>
+
+
+    {% if image %}
+        {{image}}
+    {% endif %}
 
     <table>
         {{form.as_table}}
