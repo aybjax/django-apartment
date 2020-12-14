@@ -12,7 +12,8 @@ class UserForm(UserCreationForm):
     class Meta:
         model = User
         fields = [
-                'username', 'email', 'password1', 'password2',
+                'first_name', 'last_name', 'username',
+                'email', 'password1', 'password2',
         ]
 
     def clean_email(self):
@@ -25,6 +26,22 @@ class UserForm(UserCreationForm):
             raise ValidationError("Email already exists")
         
         return email
+
+    def clean_first_name(self):
+        name = self.cleaned_data.get('first_name', "")
+
+        if name == "":
+            raise ValidationError("First name required")
+
+        return name
+
+    def clean_last_name(self):
+        name = self.cleaned_data.get('last_name', "")
+
+        if name == "":
+            raise ValidationError("Last name required")
+
+        return name
 
     # def clean(self):
     #     form_data = self.cleaned_data

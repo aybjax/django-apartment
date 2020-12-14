@@ -1,5 +1,6 @@
 from django.db import models
 from user_extended.models import Extension
+from .functions.uploadTo import uploadTo
 
 
 class Seller(models.Model):
@@ -8,10 +9,10 @@ class Seller(models.Model):
                                 related_name='seller')
 
     def __str__(self):
-        return "seller: %s from %s" % (self.user.user.username, self.user.get_city_display())
+        return "seller: %s" % self.user.user.username
 
     def getSellerPathForImage(self):
-        return "%d_%s_%s" % (
+        return "%d_%s_from_%s" % (
                 self.pk, self.user.user.username, self.user.city
         )
 
@@ -25,27 +26,31 @@ class Apartment(models.Model):
     apartment = models.PositiveSmallIntegerField(blank=False, default=None)
 
     def __str__(self):
-        return "%s street, %d, apt# %d" % (
-                self.street, self.home, self.apartment
+        return "%s street, %d, apt# %d of %s" % (
+                self.street, self.home, self.apartment, self.owner
         )
 
     def getSellerPathForImage(self):
-        return self.owner.getSellerPathForImage()
+        return '%s/apt_%s_%d_%d' % (
+                self.owner.getSellerPathForImage(),
+                self.street,
+                self.home,
+                self.apartment,
+        )
 
 
 class ApartmentImage(models.Model):
     apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE,
                                   related_name="images")
-    image = models.ImageField(blank=True, null=True)
+    image = models.ImageField(
+        upload_to=uploadTo,
+        default='default_image/apartment.jpeg',
+    )
 
     def __str__(self):
-        try:
-            image = self.image.url
-        except:
-            image = "no"
-        return f'image: id = %d, of apartment: %s ||||| url: %s' % (
-                self.pk, self.apartment, image
+        return 'apartment: %s of %s' % (
+                self.apartment, self.apartment.owner
         )
 
     def getSellerPathForImage(self):
-        self.apartment.getSellerPathForImage()
+        return self.apartment.getSellerPathForImage()

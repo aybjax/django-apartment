@@ -2,6 +2,8 @@
 
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import subprocess
+import time
 
 
 def print_hi(name):
@@ -11,6 +13,11 @@ def print_hi(name):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    print_hi('PyCharm...')
+    time.sleep(1)
+    subprocess.call([
+            'python', 'manage.py', 'runserver',
+    ])
+
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
