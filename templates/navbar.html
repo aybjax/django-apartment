@@ -1,0 +1,56 @@
+<ul>
+    <li style="display: inline">|</li>
+    <li style="display: inline">
+        <a href="{% url 'seller:apartment-list' %}">
+            all apartment
+        </a>
+    </li>
+    <li style="display: inline">|</li>
+
+
+    {% if request.user.is_authenticated %}
+         <li style="display: inline">
+            <a href="{% url 'seller:apartment-list' %}?pk={{request.user.user_extension.seller.pk}}">
+                my apartment
+            </a>
+        </li>
+        <li style="display: inline">|</li>
+    {% endif %}
+
+
+    {% if request.user.is_authenticated and request.user.user_extension %}
+         <li style="display: inline">
+            <a href="{% url 'profile-detail' request.user.user_extension.pk %}">
+                my profile
+            </a>
+        </li>
+        <li style="display: inline">|</li>
+    {% endif %}
+
+    {% if request.user.is_authenticated %}
+        <li style="display: inline">
+            <a href="{% url 'logout' %}">
+                logout
+            </a>
+        </li>
+        <li style="display: inline">|</li>
+
+
+    {% else %}
+        <li style="display: inline">
+            <a href="{% url 'login' %}">
+                login
+            </a>
+        </li>
+        <li style="display: inline">|</li>
+
+
+        <li style="display: inline">
+            <a href="{% url 'register' %}">
+                register
+            </a>
+        </li>
+        <li style="display: inline">|</li>
+
+    {% endif %}
+</ul>

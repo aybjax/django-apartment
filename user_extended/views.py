@@ -1,8 +1,11 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import redirect, render, reverse
 from django.contrib import messages
+from django.views import generic
+from .models import Extension
 from . import forms
 from .functions.loginUser import loginUser
 from .functions.sendEmail import sendEmail
@@ -104,3 +107,7 @@ def updateUsername(request: HttpRequest, *args, **kwargs):
     context['form'] = form
 
     return render(request, 'user/update_profile.html', context)
+
+
+class ViewPersonalDetail(LoginRequiredMixin, generic.DetailView):
+    queryset = Extension.objects.all()

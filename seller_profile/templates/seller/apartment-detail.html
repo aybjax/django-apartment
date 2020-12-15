@@ -28,8 +28,10 @@
     </p>
     <br/><br/>
     <p>
-        owner: <a href="{% url '' %}">
-        {{object.owner.user_extension.user.get_full_name}}
+        owner:
+        <a href="{% url 'profile-detail' object.owner.user_extension.pk %}">
+            {{object.owner.user_extension.user.get_full_name}}
+        </a>
     </p>
 
     <p>

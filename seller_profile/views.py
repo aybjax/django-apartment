@@ -60,7 +60,9 @@ def updateApartment(request: HttpRequest, *args, **kwargs) -> HttpResponse:
     apt = Apartment.objects.filter(pk=pk)[0]
 
     if apt.owner.user_extension.user.pk != request.user.pk:
-        raise Http404
+        return HttpResponse(
+                "<h1>You can only update your own apartments</h1>"
+        )
 
     aptImg = apt.images.first()
 
@@ -98,8 +100,14 @@ class ApartmentList(generic.ListView):
         qs = super().get_queryset()
         get = self.request.GET
 
-        if pk := get.get('pk'):
-            qs = qs.filter(owner__pk=pk)
+        if not get:
+            return qs
+
+        if 'pk' in get.keys():
+            if pk := get.get('pk'):
+                qs = qs.filter(owner__pk=pk)
+            else:
+                qs = []
 
         return qs
 

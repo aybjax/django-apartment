@@ -11,6 +11,9 @@ urlpatterns = [
              name='logout'),
         path('update-personal/', views.updatePersonal, name="update-personal"),
         path('update-username/', views.updateUsername, name="update-username"),
+        path('personal-detail/<int:pk>',
+             views.ViewPersonalDetail.as_view(template_name='user/detail_profile.html'),
+             name="profile-detail"),
 
         ##################
         # password stuff #
