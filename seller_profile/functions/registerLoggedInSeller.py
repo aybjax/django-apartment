@@ -3,7 +3,7 @@ from seller_profile.models import Seller
 
 
 def registerLoggedInSeller(request: HttpRequest) -> Seller:
-    seller = Seller.objects.create(user=request.user.extension)
-    request.user.extension.seller = seller
+    seller = Seller.objects.create(user_extension=request.user.user_extension)
+    request.user.user_extension.seller = seller
 
     return seller

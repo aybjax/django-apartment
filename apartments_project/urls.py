@@ -23,6 +23,7 @@ urlpatterns = [
     path('seller/', include('seller_profile.urls')),
     path('buyer/', include('buyer_profile.urls')),
     path('', include('user_extended.urls')),
+
 ]
 
 if settings.DEBUG:

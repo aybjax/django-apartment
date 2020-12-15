@@ -6,16 +6,7 @@ from django.core.exceptions import ValidationError
 from .models import Extension
 
 
-class UserForm(UserCreationForm):
-    email = forms.EmailField(required=True)
-
-    class Meta:
-        model = User
-        fields = [
-                'first_name', 'last_name', 'username',
-                'email', 'password1', 'password2',
-        ]
-
+class EmailNotEmptyMixin:
     def clean_email(self):
         email = self.cleaned_data.get('email', 0)
 
@@ -24,9 +15,11 @@ class UserForm(UserCreationForm):
 
         if User.objects.filter(email=email).exists():
             raise ValidationError("Email already exists")
-        
+
         return email
 
+
+class NamesNotEmptyMixin:
     def clean_first_name(self):
         name = self.cleaned_data.get('first_name', "")
 
@@ -42,6 +35,17 @@ class UserForm(UserCreationForm):
             raise ValidationError("Last name required")
 
         return name
+
+
+class UserForm(UserCreationForm, EmailNotEmptyMixin, NamesNotEmptyMixin):
+    email = forms.EmailField(required=True)
+
+    class Meta:
+        model = User
+        fields = [
+                'first_name', 'last_name', 'username',
+                'email', 'password1', 'password2',
+        ]
 
     # def clean(self):
     #     form_data = self.cleaned_data
@@ -59,3 +63,28 @@ class UserExtendedForm(forms.ModelForm):
         ]
 
         # exclude = ["user"] # this version does not save image
+
+
+class UserUpdateFLI(forms.ModelForm, NamesNotEmptyMixin):
+    class Meta:
+        model = User
+        fields = [
+                'first_name', 'last_name'
+        ]
+
+
+class UserExtendedUpdateFLI(forms.ModelForm):
+    class Meta:
+        model = Extension
+        fields = [
+                'city',
+                'image',
+        ]
+
+
+class UserUpdateUsernameForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = [
+                'username', 'email'
+        ]

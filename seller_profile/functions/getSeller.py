@@ -5,7 +5,7 @@ from seller_profile.functions.registerLoggedInSeller import registerLoggedInSell
 def getSeller(request: HttpRequest):
     justRegistered = True
     try:
-        seller = request.user.extension.seller
+        seller = request.user.user_extension.seller
     except:
         seller = registerLoggedInSeller(request)
     else:

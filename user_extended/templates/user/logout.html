@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    You logged out
+{% endblock title %}
+
+{% block body %}
+
+    You logged out! <br/>
+    Have an account? <a href="{% url 'user:login' %}">Login</a> <br/>
+    Or <a href="{% url 'user:register' %}">Register</a>
+
+{% endblock body %}
+

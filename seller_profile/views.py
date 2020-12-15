@@ -5,14 +5,15 @@ from django.shortcuts import redirect, render, reverse
 from django.contrib import messages
 from seller_profile.forms import ApartmentImageForm, RegisterApartment
 from seller_profile.functions.getSeller import getSeller
-from seller_profile.models import ApartmentImage
+from django.views import generic
+from seller_profile.models import Apartment
 
 
 def test(request: HttpRequest, *args, **kwargs) -> HttpResponse:
     return HttpResponse("testing seller_profile")
 
 
-# @login_required
+@login_required
 def registerApartment(request: HttpRequest, *args, **kwargs) -> HttpResponse:
     context = dict()
     if request.method == 'POST':
@@ -40,18 +41,72 @@ def registerApartment(request: HttpRequest, *args, **kwargs) -> HttpResponse:
                 img.save()
                 messages.success(request,
                                  f"image saved {img}")
-            else:
-                messages.error(request, "image could not be saved")
-            # for image in request.FILES:
-            #     imageModel = ApartmentImage.objects.create(
-            #             apartment=apartment, image=image
-            #     )
-            #     imageModel.save()
 
-            # return redirect(reverse('seller:test'))
+                return redirect(reverse('seller:apartment-list'))
+
     else:
         form = RegisterApartment()
         image = ApartmentImageForm()
     context['form'] = form
     context['image'] = image
-    return render(request, 'seller/register.html', context)
+    return render(request, 'seller/apartment-register.html', context)
+
+
+@login_required
+def updateApartment(request: HttpRequest, *args, **kwargs) -> HttpResponse:
+    context = dict()
+
+    pk = request.GET.get('pk')
+    apt = Apartment.objects.filter(pk=pk)[0]
+
+    if apt.owner.user_extension.user.pk != request.user.pk:
+        raise Http404
+
+    aptImg = apt.images.first()
+
+    if request.method == 'POST':
+        form = RegisterApartment(request.POST, instance=apt)
+        image = ApartmentImageForm(request.POST, request.FILES,
+                                   instance=aptImg)  # passing only FILES does not work
+
+        if form.is_valid():
+            form.save()
+
+            messages.success(request,
+                             f"apartment @ {apt} updated")
+
+            if image.is_valid():
+                img = image.save()
+                messages.success(request,
+                                 f"image saved {img}")
+
+                return redirect(reverse("seller:apartment-detail", kwargs={"pk": pk}))
+
+    else:
+        form = RegisterApartment(instance=apt)
+        image = ApartmentImageForm(instance=aptImg)
+    context['form'] = form
+    context['image'] = image
+    return render(request, 'seller/apartment-register.html', context)
+
+
+class ApartmentList(generic.ListView):
+    template_name = 'seller/apartment-list.html'
+    queryset = Apartment.objects.all()
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        get = self.request.GET
+
+        if pk := get.get('pk'):
+            qs = qs.filter(owner__pk=pk)
+
+        return qs
+
+
+class ApartmentDetail(generic.DetailView):
+    template_name = 'seller/apartment-detail.html'
+    queryset = Apartment.objects.all()
+
+
+

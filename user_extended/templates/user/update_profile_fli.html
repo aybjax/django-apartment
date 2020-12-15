@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Update personal info
+{% endblock title %}
+
+
+{% block body %}
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <img src="{{ request.user.user_extension.image.url }}" width="300" height="200"/>
+        <table>
+            <tr>
+                <td>Name:</td>
+                <td>{{request.user.get_full_name}}</td>
+            </tr>
+            <tr>
+                <td>Username:</td>
+                <td>{{request.user.username}}</td>
+            </tr>
+            <tr>
+                <td>Email:</td>
+                <td>{{request.user.email}}</td>
+            </tr>
+            {{form.as_table}}
+            {{formExtension.as_table}}
+            <tr>
+                <td colspan="2">
+                    <input type="submit" value="update">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <a href="{% url 'user:update-username' %}">
+                        update user credentials
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+{% endblock body %}

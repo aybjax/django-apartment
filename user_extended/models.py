@@ -6,7 +6,7 @@ from user_extended.functions.uploadTo import uploadTo
 
 class Extension(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Associated user',
-                                null=True, blank=False, related_name='extension')
+                                null=True, blank=False, related_name='user_extension')
     city = models.CharField(max_length=2,
                             choices=constants.PROFILE_CITY,
                             default=constants.PROFILE_CITY_DEFAULT_VALUE)

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Apartment
+{% endblock title %}
+
+
+{% block body %}
+
+<div>
+        {% for image in object.images.all %}
+            <img src="{{object.images.first.image.url}}" alt="apartment image" width="400" height="300">
+        {% endfor %}
+        <h3>
+            {{object.title}}
+        </h3>
+
+    <p>
+        {{object.description}}
+    </p>
+    <p>
+        price:
+        {{object.price}}
+    </p>
+    <p>
+        address:
+        {{object.street}} street {{object.home}} apt# {{object.apartment}}
+    </p>
+    <br/><br/>
+    <p>
+        owner:
+        {{object.owner.user_extension.user.get_full_name}}
+    </p>
+
+    <p>
+        <a href="{% url 'seller:apartment-list' %}?pk={{object.owner.pk}}">
+            get owner's apartments
+        </a>
+    </p>
+    <p>
+        <br/>
+        <a href="{% url 'seller:update-apartment' %}?pk={{object.pk}}">
+            update apartment
+        </a>
+    </p>
+</div>
+{# owner #}
+
+{% endblock body %}
+

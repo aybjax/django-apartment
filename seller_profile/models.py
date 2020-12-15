@@ -4,16 +4,16 @@ from .functions.uploadTo import uploadTo
 
 
 class Seller(models.Model):
-    user = models.OneToOneField(Extension, on_delete=models.CASCADE,
-                                verbose_name='Associated user',
-                                related_name='seller')
+    user_extension = models.OneToOneField(Extension, on_delete=models.CASCADE,
+                                          verbose_name='Associated user',
+                                          related_name='seller')
 
     def __str__(self):
-        return "seller: %s" % self.user.user.username
+        return "seller: %s" % self.user_extension.user.username
 
     def getSellerPathForImage(self):
         return "%d_%s_from_%s" % (
-                self.pk, self.user.user.username, self.user.city
+                self.pk, self.user_extension.user.username, self.user_extension.city
         )
 
 
@@ -21,6 +21,9 @@ class Apartment(models.Model):
     owner = models.ForeignKey(Seller, on_delete=models.CASCADE,
                               verbose_name='Seller/Owner of apartment',
                               default=None)
+    title = models.CharField(max_length=30, blank=False, default=None)
+    description = models.TextField(default=None)
+    price = models.PositiveIntegerField(blank=False, default=None)
     street = models.CharField(max_length=50, blank=False, default=None)
     home = models.PositiveSmallIntegerField(blank=False, default=None)
     apartment = models.PositiveSmallIntegerField(blank=False, default=None)
