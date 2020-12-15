@@ -129,4 +129,6 @@ MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / MEDIA_URL
 
 LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = 'user:login'
+LOGIN_URL = 'login'
+
+from .gmail_profile import *

@@ -5,6 +5,7 @@ from django.shortcuts import redirect, render, reverse
 from django.contrib import messages
 from . import forms
 from .functions.loginUser import loginUser
+from .functions.sendEmail import sendEmail
 
 
 def test(request: HttpRequest, *args, **kwargs) -> HttpResponse:
@@ -32,20 +33,13 @@ def registerUser(request: HttpRequest, *args, **kwargs) -> HttpResponse:
             messages.success(request, successMessage)
             _ = loginUser(request)
 
+            try:
+                sendEmail(request, messages)
+            except Exception as e:
+                messages.error(request, e)
+
             return redirect('seller:register-apartment')
             # return reverse('seller:register-apartment') - method POST and POST data are saved
-
-        else:
-            messages.error(request, "form not valid")
-
-            if not userForm.is_valid():
-                messages.error(request, "user form not valid")
-                messages.error(request, userForm)
-
-            if not extensionForm.is_valid():
-                messages.error(request, "extension form not valid")
-                messages.error(request, extensionForm)
-
     else:
         userForm = forms.UserForm()
         extensionForm = forms.UserExtendedForm()
@@ -61,8 +55,7 @@ def updatePersonal(request: HttpRequest, *args, **kwargs) -> HttpResponse:
     context = dict()
 
     if request.method == 'POST':
-        userForm = forms.UserUpdateFLI(request.POST,
-                                       instance=request.user)
+        userForm = forms.UserUpdateFLI(request.POST, instance=request.user)
         extensionForm = forms.UserExtendedUpdateFLI(request.POST, request.FILES,
                                                     instance=request.user.user_extension)
 
@@ -104,7 +97,7 @@ def updateUsername(request: HttpRequest, *args, **kwargs):
             form.save()
             messages.success(request, "Username updated")
 
-            return redirect(reverse('user:update-personal'))
+            return redirect(reverse('update-personal'))
     else:
         form = forms.UserUpdateUsernameForm(instance=request.user)
 

@@ -1,0 +1,2 @@
+Congrats. Account is created
+Hello <strong>{{ username }}</strong> - welcome to apartments website.
