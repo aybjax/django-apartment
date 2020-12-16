@@ -3,8 +3,9 @@ from django.contrib.auth import views as auth_views
 from user_extended import views
 from django.contrib.auth import views as auth_views
 
+# app cannot be used unless password reset app names cannot resolve
 urlpatterns = [
-        path('', views.test, name='test'),
+        path('test/', views.test, name='test'),
         path('register/', views.registerUser, name='register'),
         path('login/', auth_views.LoginView.as_view(template_name='user/login.html'), name='login'),
         path('logout/', auth_views.LogoutView.as_view(template_name='user/logout.html'),

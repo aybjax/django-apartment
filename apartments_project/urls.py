@@ -21,9 +21,9 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('seller/', include('seller_profile.urls')),
     path('buyer/', include('buyer_profile.urls')),
     path('', include('user_extended.urls')),
+    path('', include('seller_profile.urls')),
 ]
 
 if settings.DEBUG:
