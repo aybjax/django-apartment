@@ -60,9 +60,7 @@ def updateApartment(request: HttpRequest, *args, **kwargs) -> HttpResponse:
     apt = Apartment.objects.filter(pk=pk)[0]
 
     if apt.owner.user_extension.user.pk != request.user.pk:
-        return HttpResponse(
-                "<h1>You can only update your own apartments</h1>"
-        )
+        return render(request, 'seller/apartment-not-belong.html')
 
     aptImg = apt.images.first()
 
