@@ -1,7 +1,8 @@
 from django.db import models
+from PIL import Image
+
 from user_extended.models import Extension
 from .functions.uploadTo import uploadTo
-
 
 class Seller(models.Model):
     user_extension = models.OneToOneField(Extension, on_delete=models.CASCADE,
@@ -15,7 +16,6 @@ class Seller(models.Model):
         return "%d_%s_from_%s" % (
                 self.pk, self.user_extension.user.username, self.user_extension.city
         )
-
 
 class Apartment(models.Model):
     owner = models.ForeignKey(Seller, on_delete=models.CASCADE,
@@ -41,13 +41,12 @@ class Apartment(models.Model):
                 self.apartment,
         )
 
-
 class ApartmentImage(models.Model):
     apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE,
                                   related_name="images")
     image = models.ImageField(
-        upload_to=uploadTo,
-        default='default_image/apartment.jpeg',
+            upload_to=uploadTo,
+            default='default_image/apartment.jpeg',
     )
 
     def __str__(self):
@@ -57,3 +56,11 @@ class ApartmentImage(models.Model):
 
     def getSellerPathForImage(self):
         return self.apartment.getSellerPathForImage()
+
+    # def save(self):
+    #     super().save()
+    #     img = Image.open(self.image.path)
+    #
+    #     if img.height > 400 or img.width > 300:
+    #         img.thumbnail((400, 300))
+    #         img.save(self.image.path)2

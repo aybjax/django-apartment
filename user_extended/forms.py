@@ -2,6 +2,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
 from django.core.exceptions import ValidationError
+from PIL import Image
 
 from .models import Extension
 
@@ -61,7 +62,6 @@ class UserExtendedForm(forms.ModelForm):
         fields = [
                 'city', 'image'
         ]
-
         # exclude = ["user"] # this version does not save image
 
 

@@ -42,7 +42,8 @@ def registerUser(request: HttpRequest, *args, **kwargs) -> HttpResponse:
             _ = loginUser(request)
 
             try:
-                sendEmail(request, messages)
+                ...
+                # sendEmail(request, messages)
                 # sendAsyncEmail(request, messages)
             except Exception as e:
                 messages.error(request, e)
