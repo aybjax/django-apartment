@@ -1,4 +1,9 @@
-def sendEmail(request, messages):
+from django.http import HttpRequest
+from django_q.tasks import async_task
+from user_extended.services import services
+
+
+def sendEmail(request: HttpRequest, messages):
     from django.conf import settings
     # from django.core.mail import send_mail
     #
@@ -35,3 +40,16 @@ def sendEmail(request, messages):
     messages.success(request,
                      f'message sent successfully')
 
+
+def sendAsyncEmail(request: HttpRequest, messages) -> None:
+    try:
+        async_task(
+                services.send_welcome_email_async,
+                request.user.username,
+                request.user.email,
+                hook=services.hook_send_welcome_email_async,
+        )
+    except:
+        messages.success(request, "FAIL: message NOT sent")
+    else:
+        messages.success(request, "Message sent to your email address. Check spam")

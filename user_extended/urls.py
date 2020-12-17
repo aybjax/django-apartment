@@ -15,6 +15,7 @@ urlpatterns = [
         path('personal-detail/<int:pk>',
              views.ViewPersonalDetail.as_view(template_name='user/detail_profile.html'),
              name="profile-detail"),
+        path('complaint/', views.complaint, name='complaint'),
 
         ##################
         # password stuff #

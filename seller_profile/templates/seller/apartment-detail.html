@@ -46,7 +46,13 @@
         </a>
     </p>
 </div>
-{# owner #}
+
+<form method="post" action="{% url 'complaint' %}">
+    {% csrf_token %}
+    <input type="hidden" name="owner-user-id" value="{{object.owner.user_extension.user.pk}}">
+    <input type="hidden" name="apartment-id" value="{{object.pk}}">
+    <input type="submit" name="redirecting" value="complain">
+</form>
 
 {% endblock body %}
 

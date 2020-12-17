@@ -1,14 +1,19 @@
+import json
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import redirect, render, reverse
 from django.contrib import messages
 from django.views import generic
+from seller_profile.forms import ComplaintForm
+from seller_profile.models import Apartment
 from .models import Extension
 from . import forms
 from .functions.loginUser import loginUser
-from .functions.sendEmail import sendEmail
+from .functions.sendEmail import sendAsyncEmail, sendEmail
+from .functions.sendQueue import getQueue
 
 
 def test(request: HttpRequest, *args, **kwargs) -> HttpResponse:
@@ -38,6 +43,7 @@ def registerUser(request: HttpRequest, *args, **kwargs) -> HttpResponse:
 
             try:
                 sendEmail(request, messages)
+                # sendAsyncEmail(request, messages)
             except Exception as e:
                 messages.error(request, e)
 
@@ -111,3 +117,64 @@ def updateUsername(request: HttpRequest, *args, **kwargs):
 
 class ViewPersonalDetail(LoginRequiredMixin, generic.DetailView):
     queryset = Extension.objects.all()
+
+
+@login_required
+def complaint(request: HttpRequest, *args, **kwargs):
+    context = dict()
+
+    print(request.POST)
+
+    if 'redirecting' in request.POST:
+        form = ComplaintForm()
+
+        complainTarget = dict()
+
+        if userId := request.POST.get('owner-user-id', False):
+            complainTarget['complainee-id'] = userId
+            complainTarget['complainee'] = User.objects.get(pk=userId).get_full_name()
+
+        if apartmentId := request.POST.get('apartment-id', False):
+            complainTarget['complainee-apartment-id'] = apartmentId
+            complainTarget['complainee-apartment'] = str(
+                    Apartment.objects.get(pk=apartmentId)
+            )
+
+        request.session['complaint-target'] = json.dumps(complainTarget)
+
+    elif request.method == 'POST':
+        form = ComplaintForm(request.POST)
+
+        if form.is_valid():
+            msgAttr = dict()
+            msgBody = dict()
+
+            jsonTarget = request.session.get('complaint-target')
+            dictTarget = json.loads(jsonTarget)
+
+            for key, val in dictTarget.items():
+                msgAttr[key] = val
+
+            msgAttr['complainant'] = request.user.username
+            msgAttr['about'] = form.cleaned_data['type']
+
+            msgBody['title'] = form.cleaned_data['title']
+            msgBody['description'] = form.cleaned_data['description']
+
+            jsonAttr = json.dumps(msgAttr)
+            jsonMsg = json.dumps(msgBody)
+
+            messages.success(request, f'attr => {jsonAttr}')
+            messages.success(request, f'msg => {jsonMsg}')
+
+            form = ComplaintForm()
+
+            del request.session['complaint-target']
+
+            getQueue()
+    else:
+        form = ComplaintForm()
+
+    context['form'] = form
+
+    return render(request, 'complaint/complaint.html', context)

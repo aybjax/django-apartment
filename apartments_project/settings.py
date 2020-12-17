@@ -38,7 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    #apps
+    #  3rd party
+    'django_q',
+    'storages',
+
+    #  apps
     'seller_profile',
     'buyer_profile.apps.BuyerProfileConfig',  # have to make this for signal to be registered
     'user_extended',
