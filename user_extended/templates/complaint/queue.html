@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Queue of complaint
+{% endblock title %}
+
+{% block body %}
+msgBody['complainant'] = request.user.username
+msgBody['about'] = form.cleaned_data['type']
+msgBody['title'] = form.cleaned_data['title']
+msgBody['description'] = form.cleaned_data['description']
+
+complainTarget['complainee-id'] = userId
+complainTarget['complainee'] = User.objects.get(pk=userId).get_full_name()
+complainTarget['complainee-apartment-id'] = apartmentId
+complainTarget['complainee-apartment']
+
+    <table>
+        <tr>
+            <td>
+            </td>
+            <td>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+            </td>
+            <td>
+            </td>
+        </tr>
+    </table>
+
+{% endblock body %}
+

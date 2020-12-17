@@ -13,7 +13,7 @@ from .models import Extension
 from . import forms
 from .functions.loginUser import loginUser
 from .functions.sendEmail import sendAsyncEmail, sendEmail
-from .functions.sendQueue import getQueue
+from .functions.sendQueue import getQueue, sendQueue
 
 
 def test(request: HttpRequest, *args, **kwargs) -> HttpResponse:
@@ -146,32 +146,30 @@ def complaint(request: HttpRequest, *args, **kwargs):
         form = ComplaintForm(request.POST)
 
         if form.is_valid():
-            msgAttr = dict()
             msgBody = dict()
 
             jsonTarget = request.session.get('complaint-target')
             dictTarget = json.loads(jsonTarget)
 
             for key, val in dictTarget.items():
-                msgAttr[key] = val
+                msgBody[key] = val
 
-            msgAttr['complainant'] = request.user.username
-            msgAttr['about'] = form.cleaned_data['type']
-
+            msgBody['complainant'] = request.user.username
+            msgBody['about'] = form.cleaned_data['type']
             msgBody['title'] = form.cleaned_data['title']
             msgBody['description'] = form.cleaned_data['description']
 
-            jsonAttr = json.dumps(msgAttr)
             jsonMsg = json.dumps(msgBody)
 
-            messages.success(request, f'attr => {jsonAttr}')
             messages.success(request, f'msg => {jsonMsg}')
 
             form = ComplaintForm()
 
             del request.session['complaint-target']
 
-            getQueue()
+            queueId = sendQueue(jsonMsg)
+
+            messages.success(request, f'{queueId} is message id')
     else:
         form = ComplaintForm()
 

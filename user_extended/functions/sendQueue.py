@@ -4,13 +4,23 @@ import boto3
 def getQueue():
     sqs = boto3.resource('sqs')
 
-    queue = sqs.get_queue_by_name(QueueName='complaints')
+    try:
+        queue = sqs.get_queue_by_name(QueueName='complaints')
+    except:
+        queue = sqs.create_queue(
+                QueueName='complaints',
+                Attributes={
+                        'VisibilityTimeout': '43200',  # 12 hrs
+                        'DelaySeconds': '5',
+                        'ReceiveMessageWaitTimeSeconds': '1',
+                        'MessageRetentionPeriod': '1209600',  # 14 dys
+                })
+    return queue
 
-    # queue = sqs.create_queue(
-    #         QueueName='complaints',
-    #         # Attributes={'DelaySeconds': '5'}
-    # )
 
-    print(queue)
-    print(queue.url)
-    print(queue.attributes)
+def sendQueue(msg):
+    queue = getQueue()
+
+    response = queue.send_message(MessageBody=msg)
+
+    return response
