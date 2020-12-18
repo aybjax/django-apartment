@@ -1,12 +1,19 @@
+import json
 import re
 
 from django.db import models
 from django.contrib.auth.models import User
 from PIL import Image
 
-from lambda_function_imageResize.imageResize import main
+from functions import sendSqs
+from functions.async_services import sendQueue_async
 from . import constants
-from user_extended.functions.uploadTo import uploadTo
+
+
+def uploadTo(self, filename):
+    return "profile_image/%d_%s/%s" % (
+            self.user.pk, self.user.username, filename
+    )
 
 
 class Extension(models.Model):
@@ -23,9 +30,14 @@ class Extension(models.Model):
     def save(self):
         super().save()
         obj_name = self.get_image_amazon_path()
-
-        if obj_name:
-            main(obj_name)
+        msg = json.dumps({
+                'filename': obj_name,
+                'size':     250,
+        })
+        sendQueue_async(msg, sendSqs.RESIZE_NAME, sendSqs.RESIZE_ATTR)
+        print("sendQueue")
+        # if obj_name:
+        #     main(obj_name)
         # img = Image.open(self.image.path)
         #
         # if img.height > 250 or img.width > 200:

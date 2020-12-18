@@ -1,3 +1,4 @@
+# gmail smtp
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = "gmail"
@@ -6,7 +7,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'send from gmail directly from django'
 
-
+# django-q
 Q_CLUSTER = {
     'name': 'DJANGO_APARTMENT_AWS_SQS_MESSAGE_BROKER',
     'recycle': 200,  # memory
@@ -25,3 +26,8 @@ Q_CLUSTER = {
         'aws_secret_access_key': 'password'  # optional
     }
 }
+
+#  django-storage
+AWS_ACCESS_KEY_ID = 'access_key'
+AWS_SECRET_ACCESS_KEY = 'password'
+AWS_STORAGE_BUCKET_NAME = 'bucket-name'

@@ -1,5 +1,5 @@
 from django.http import HttpRequest
-from seller_profile.functions.registerLoggedInSeller import registerLoggedInSeller
+from functions.registerLoggedInSeller import registerLoggedInSeller
 
 
 def getSeller(request: HttpRequest):

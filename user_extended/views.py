@@ -1,19 +1,18 @@
 import json
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import redirect, render, reverse
 from django.contrib import messages
 from django.views import generic
+from functions.async_services import sendAsyncEmail, sendQueue_async
 from seller_profile.forms import ComplaintForm
 from seller_profile.models import Apartment
 from .models import Extension
 from . import forms
-from .functions.loginUser import loginUser
-from .functions.sendEmail import sendAsyncEmail, sendEmail
-from .functions.sendQueue import getQueue, sendQueue
+from functions.loginUser import loginUser
+from functions.sendSqs import sendQueue, COMPLAINT_NAME, COMPLAINT_ATTR
 
 
 def test(request: HttpRequest, *args, **kwargs) -> HttpResponse:
@@ -44,12 +43,13 @@ def registerUser(request: HttpRequest, *args, **kwargs) -> HttpResponse:
             try:
                 ...
                 # sendEmail(request, messages)
-                # sendAsyncEmail(request, messages)
+                sendAsyncEmail(request, messages)
             except Exception as e:
                 messages.error(request, e)
 
-            return redirect('seller:register-apartment')
+            # return redirect('seller:register-apartment')
             # return reverse('seller:register-apartment') - method POST and POST data are saved
+            return redirect(reverse('profile-detail', kwargs={'pk':request.user.user_extension.pk}))
     else:
         userForm = forms.UserForm()
         extensionForm = forms.UserExtendedForm()
@@ -168,9 +168,8 @@ def complaint(request: HttpRequest, *args, **kwargs):
 
             del request.session['complaint-target']
 
-            queueId = sendQueue(jsonMsg)
-
-            messages.success(request, f'{queueId} is message id')
+            # queueId = sendQueue(jsonMsg, COMPLAINT_NAME, COMPLAINT_ATTR)
+            sendQueue_async(jsonMsg, COMPLAINT_NAME, COMPLAINT_ATTR)
     else:
         form = ComplaintForm()
 

@@ -6,3 +6,7 @@ db.sqlite3
 **apartment_images
 **profile_image
 gmail_profile.py
+package/
+PIL
+Pillow.libs
+Pillow-8.0.1.dist-info

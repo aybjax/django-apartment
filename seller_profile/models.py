@@ -1,10 +1,11 @@
+import json
 import re
 
 from django.db import models
 # from PIL import Image
-from lambda_function_imageResize.imageResize import main
+from functions import sendSqs
+from functions.async_services import sendQueue_async
 from user_extended.models import Extension
-from .functions.uploadTo import uploadTo
 
 
 class Seller(models.Model):
@@ -46,6 +47,15 @@ class Apartment(models.Model):
         )
 
 
+def uploadTo(self, filename):
+    path = self.getSellerPathForImage()
+    filepath = 'apartment_images/%s/%s' % (
+            path, filename
+    )
+
+    return filepath
+
+
 class ApartmentImage(models.Model):
     apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE,
                                   related_name="images")
@@ -65,9 +75,15 @@ class ApartmentImage(models.Model):
     def save(self):
         super().save()
         obj_name = self.get_image_amazon_path()
+        msg = json.dumps({
+                'filename': obj_name,
+                'size':     400,
+        })
 
-        if obj_name:
-            main(obj_name)
+        sendQueue_async(msg, sendSqs.RESIZE_NAME, sendSqs.RESIZE_ATTR)
+
+        # if obj_name:
+        #     main(obj_name)
 
         # img = Image.open(self.image.path)
         #

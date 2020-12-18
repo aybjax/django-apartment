@@ -1,10 +1,9 @@
 from django.contrib.auth.decorators import login_required
-from django.db import IntegrityError
-from django.http import Http404, HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render, reverse
 from django.contrib import messages
 from seller_profile.forms import ApartmentImageForm, RegisterApartment
-from seller_profile.functions.getSeller import getSeller
+from functions.getSeller import getSeller
 from django.views import generic
 from seller_profile.models import Apartment
 
