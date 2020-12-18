@@ -1,8 +1,11 @@
-from django.db import models
-from PIL import Image
+import re
 
+from django.db import models
+# from PIL import Image
+from lambda_function_imageResize.imageResize import main
 from user_extended.models import Extension
 from .functions.uploadTo import uploadTo
+
 
 class Seller(models.Model):
     user_extension = models.OneToOneField(Extension, on_delete=models.CASCADE,
@@ -16,6 +19,7 @@ class Seller(models.Model):
         return "%d_%s_from_%s" % (
                 self.pk, self.user_extension.user.username, self.user_extension.city
         )
+
 
 class Apartment(models.Model):
     owner = models.ForeignKey(Seller, on_delete=models.CASCADE,
@@ -41,6 +45,7 @@ class Apartment(models.Model):
                 self.apartment,
         )
 
+
 class ApartmentImage(models.Model):
     apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE,
                                   related_name="images")
@@ -57,10 +62,35 @@ class ApartmentImage(models.Model):
     def getSellerPathForImage(self):
         return self.apartment.getSellerPathForImage()
 
-    # def save(self):
-    #     super().save()
-    #     img = Image.open(self.image.path)
-    #
-    #     if img.height > 400 or img.width > 300:
-    #         img.thumbnail((400, 300))
-    #         img.save(self.image.path)2
+    def save(self):
+        super().save()
+        obj_name = self.get_image_amazon_path()
+
+        if obj_name:
+            main(obj_name)
+
+        # img = Image.open(self.image.path)
+        #
+        # if img.height > 400 or img.width > 300:
+        #     img.thumbnail((400, 300))
+        #     img.save(self.image.path)
+
+    def get_image_amazon_path(self):
+        path_name = re.search(r'/(.+)\?', self.image.url).group(1)
+
+        if 'default_image/apartment.jpeg' in path_name:
+            return False
+
+        last_occurrence = path_name.rfind('/')
+
+        if last_occurrence == -1:
+            return path_name
+
+        file_name = path_name[last_occurrence+1:]
+
+        obj_name_in_bucket = uploadTo(self, file_name)
+
+        print(f'obj_name_in_bucket: {file_name}')
+
+        return obj_name_in_bucket
+
