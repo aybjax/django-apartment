@@ -7,6 +7,7 @@ from django.shortcuts import redirect, render, reverse
 from django.contrib import messages
 from django.views import generic
 from functions.async_services import sendAsyncEmail, sendQueue_async
+from functions.sendEmail import sendEmail
 from seller_profile.forms import ComplaintForm
 from seller_profile.models import Apartment
 from .models import Extension
@@ -42,8 +43,8 @@ def registerUser(request: HttpRequest, *args, **kwargs) -> HttpResponse:
 
             try:
                 ...
-                # sendEmail(request, messages)
-                sendAsyncEmail(request, messages)
+                sendEmail(request, messages)
+                # sendAsyncEmail(request, messages)  # uncomment
             except Exception as e:
                 messages.error(request, e)
 
@@ -169,7 +170,7 @@ def complaint(request: HttpRequest, *args, **kwargs):
             del request.session['complaint-target']
 
             # queueId = sendQueue(jsonMsg, COMPLAINT_NAME, COMPLAINT_ATTR)
-            sendQueue_async(jsonMsg, COMPLAINT_NAME, COMPLAINT_ATTR)
+            # sendQueue_async(jsonMsg, COMPLAINT_NAME, COMPLAINT_ATTR)  # uncomment
     else:
         form = ComplaintForm()
 
