@@ -137,8 +137,8 @@ MEDIA_ROOT = BASE_DIR / MEDIA_URL
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = 'login'
 
-# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage' # commented for testing styling
-# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'  # if styling is also in bucket
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 from .gmail_profile import *
 
