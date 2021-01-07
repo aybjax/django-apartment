@@ -1,7 +1,7 @@
-<ul class="flex mx-2 mt-0 bg-blue-400 rounded-lg">
+<ul class="flex mt-0 bg-blue-400">
     <li>
-        <a class="py-3 px-3 rounded-l-lg text-gray-900 hover:bg-purple-700 hover:text-white inline-block" href="{% url 'seller:apartment-list' %}">
-            all apartment
+        <a class="py-3 px-3 text-gray-900 hover:bg-purple-700 hover:text-white inline-block" href="{% url 'seller:apartment-list' %}">
+            all apartments
         </a>
     </li>
 
@@ -9,7 +9,7 @@
     {% if request.user.is_authenticated %}
         <li>
             <a class="py-3 px-3 text-gray-900 hover:bg-purple-700 hover:text-white inline-block" href="{% url 'seller:apartment-list' %}?pk={{request.user.user_extension.seller.pk}}">
-                my apartment
+                my apartments
             </a>
         </li>
     {% endif %}
@@ -26,7 +26,7 @@
 
     {% if request.user.is_authenticated %}
         <li>
-            <a class="py-3 px-3 rounded-l-lg text-gray-900 hover:bg-purple-700 hover:text-white inline-block" href="{% url 'logout' %}">
+            <a class="py-3 px-3 text-gray-900 hover:bg-purple-700 hover:text-white inline-block" href="{% url 'logout' %}">
                 logout
             </a>
         </li>
@@ -41,7 +41,7 @@
 
 
         <li>
-            <a class="py-3 px-3 rounded-r-lg text-gray-900 hover:bg-purple-700 hover:text-white inline-block" href="{% url 'register' %}">
+            <a class="py-3 px-3 text-gray-900 hover:bg-purple-700 hover:text-white inline-block" href="{% url 'register' %}">
                 register
             </a>
         </li>

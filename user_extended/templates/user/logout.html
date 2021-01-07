@@ -5,10 +5,14 @@
 {% endblock title %}
 
 {% block body %}
-
+<div class="w-full text-center">
     You logged out! <br/>
-    Have an account? <a href="{% url 'login' %}">Login</a> <br/>
-    Or <a href="{% url 'register' %}">Register</a>
-
+    Have an account? <a class="px-2 py-1 rounded-full bg-purple-300 hover:bg-purple-600
+                                text-gray-900 hover:text-gray-100"
+                        href="{% url 'login' %}">Login</a> <br/>
+    Or <a class="px-2 py-1 rounded-full bg-purple-300 hover:bg-purple-600
+                text-gray-900 hover:text-gray-100"
+                href="{% url 'register' %}">Register</a>
+</div>
 {% endblock body %}
 

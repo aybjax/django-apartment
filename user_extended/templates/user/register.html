@@ -6,25 +6,63 @@
 {% endblock title %}
 
 {% block body %}
+<div
+class="flex justify-center pt-3 text-gray-800"
+>
+    <form method="post" enctype="multipart/form-data"
+        class="w-1/2 max-w-md flex flex-col items-center px-6
+        bg-purple-300
+        p-3
+        rounded-lg
+        border-2
+        border-black
+        "
+    >
 
-
-<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <table>
-        {{form.as_table}}
-        {{formExtension.as_table}}
-        <tr>
-            <td colspan="2">
-                <input type="submit" value="register">
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                Have an account? <a href="{% url 'login' %}">Login</a> then
-            </td>
-        </tr>
-    </table>
-</form>
+
+        <div class="py-4 flex flex-col justify-between w-full my-2 p-2">
+            {% load tailwind_filters %}
+            {{form | crispy}}
+            {{formExtension | crispy}}
+        </div>
+
+        <div class="w-full text-center">
+            <input
+                type="submit" value="register"
+                class="
+                    border-b-2
+                    border-black
+                    bg-purple-300
+                    inline-block
+                    w-full
+                    hover:bg-purple-900
+                    hover:text-gray-200
+                    p-2
+                "
+            />
+        </div>
+
+        <div class="w-full text-center">
+            Have an account?
+            <a class="
+                inline-block
+                hover:bg-purple-900
+                hover:text-gray-200
+                py-1
+                px-2
+                bg-purple-400
+                rounded-full
+            "
+                href="{% url 'login' %}"
+            >
+                Login
+            </a>
+            then
+        </div>
+
+    </form>
+</div>
 
 
 

@@ -4,47 +4,101 @@
     Update personal info
 {% endblock title %}
 
-
 {% block body %}
 
-    <form method="post" enctype="multipart/form-data">
+    <div
+        class="flex justify-center pt-3 text-gray-800"
+    >
+        <form method="post" enctype="multipart/form-data"
+            class="w-1/2 max-w-md flex flex-col items-center px-6
+            bg-purple-300
+            p-3
+            rounded-lg
+            border-2
+            border-black
+            "
+        >
         {% csrf_token %}
         <img src="{{ request.user.user_extension.image.url }}" width="300" height="200"/>
-        <table>
-            <tr>
-                <td>Name:</td>
-                <td>{{request.user.get_full_name}}</td>
-            </tr>
-            <tr>
-                <td>Username:</td>
-                <td>{{request.user.username}}</td>
-            </tr>
-            <tr>
-                <td>Email:</td>
-                <td>{{request.user.email}}</td>
-            </tr>
-            {{form.as_table}}
-            {{formExtension.as_table}}
-            <tr>
-                <td colspan="2">
-                    <input type="submit" value="update">
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <a href="{% url 'update-username' %}">
-                        update user credentials
-                    </a>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <a href="{% url 'profile-detail' request.user.user_extension.pk %}">
-                        get back
-                    </a>
-                </td>
-            </tr>
-        </table>
-    </form>
+            <div class="flex flex-row justify-between w-full my-2 p-2">
+                <div class="inline-block">
+                    Name: 
+                </div>
+                <div class="inline-block">
+                    {{request.user.get_full_name}}
+                </div>
+            </div>
+
+            <div class="flex flex-row justify-between w-full my-2 p-2">
+                <div class="inline-block">
+                    Username:
+                </div>
+                <div class="inline-block">
+                    {{request.user.username}}
+                </div>
+            </div>
+
+
+            <div class="flex flex-row justify-between w-full my-2 p-2
+                        border-b-2
+                        border-black
+                        ">
+                <div class="inline-block">
+                    Email:
+                </div>
+                <div class="inline-block">
+                    {{request.user.email}}
+                </div>
+            </div>
+
+            <div class="py-4 flex flex-col justify-between w-full my-2 p-2">
+                {% load tailwind_filters %}
+                {{form | crispy}}
+                {{formExtension | crispy}}
+            </div>
+
+            <div class="w-full text-center">
+                <input
+                    type="submit" value="update"
+                    class="
+                        border-b-2
+                        border-black
+                        bg-purple-300
+                        inline-block
+                        w-full
+                        hover:bg-purple-900
+                        hover:text-gray-200
+                        p-2
+                    "
+                />
+            </div>
+
+            <div class="w-full text-center">
+                <a class="
+                    inline-block
+                    w-full
+                    hover:bg-purple-900
+                    hover:text-gray-200
+                    p-2
+                "
+                    href="{% url 'update-username' %}">
+                    update user credentials
+                </a>
+            </div>
+
+            <div class="w-full text-center">
+                <a class="
+                    inline-block
+                    w-full
+                    hover:bg-purple-900
+                    hover:text-gray-200
+                    p-2
+                "
+                    href="{% url 'profile-detail' request.user.user_extension.pk %}">
+                    get back
+                </a>
+            </div>
+        </form>
+    </div>
 
 {% endblock body %}

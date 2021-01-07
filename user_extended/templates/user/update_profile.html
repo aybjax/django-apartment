@@ -6,31 +6,70 @@
 
 
 {% block body %}
+    <div
+    class="flex justify-center pt-3 text-gray-800"
+    >
+        <form method="post" enctype="multipart/form-data"
+            class="w-1/2 max-w-md flex flex-col items-center px-6
+            bg-purple-300
+            p-3
+            rounded-lg
+            border-2
+            border-black
+            "
+        >
 
-    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <table>
-            {{form.as_table}}
-            {{formExtension.as_table}}
-            <tr>
-                <td>
-                    <input type="submit" value="update">
-                </td>
-                <td>
-                    <a href="{% url 'update-personal' %}">
-                        back
-                    </a>
-                </td>
-            </tr>
 
-            <tr>
-                <td colspan="2">
-                    <a href="{% url 'password_reset' %}">
-                        Change password
-                    </a>
-                </td>
-            </tr>
-        </table>
+            <div class="py-4 flex flex-col justify-between w-full my-2 p-2">
+                {% load tailwind_filters %}
+                {{form | crispy}}
+                {{formExtension | crispy}}
+            </div>
+
+            <div class="w-full text-center">
+                <input
+                    type="submit" value="update"
+                    class="
+                        border-b-2
+                        border-black
+                        bg-purple-300
+                        inline-block
+                        w-full
+                        hover:bg-purple-900
+                        hover:text-gray-200
+                        p-2
+                    "
+                />
+            </div>
+
+            <div class="w-full text-center">
+                <a class="
+                    inline-block
+                    w-full
+                    hover:bg-purple-900
+                    hover:text-gray-200
+                    p-2
+                "
+                    href="{% url 'update-personal' %}">
+                    back
+                </a>
+            </div>
+
+            <div class="w-full text-center">
+                <a class="
+                    inline-block
+                    w-full
+                    hover:bg-purple-900
+                    hover:text-gray-200
+                    p-2
+                "
+                    href="{% url 'password_reset' %}">
+                    Change password
+                </a>
+            </div>
+
     </form>
+</div>
 
 {% endblock body %}

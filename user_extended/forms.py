@@ -71,6 +71,10 @@ class UserUpdateFLI(forms.ModelForm, NamesNotEmptyMixin):
         fields = [
                 'first_name', 'last_name'
         ]
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.fields['first_name'].widget.attrs.update({'class': 'inline-block w-full hover:bg-purple-900 hover:text-gray-200 p-2'})
+            self.fields['last_name'].widget.attrs.update({'class': 'inline-block w-full hover:bg-purple-900 hover:text-gray-200 p-2'})
 
 
 class UserExtendedUpdateFLI(forms.ModelForm):
@@ -80,6 +84,10 @@ class UserExtendedUpdateFLI(forms.ModelForm):
                 'city',
                 'image',
         ]
+    def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.fields['city'].widget.attrs.update({'class': 'inline-block w-full hover:bg-purple-900 hover:text-gray-200 p-2'})
+            self.fields['image'].widget.attrs.update({'class': 'inline-block w-full hover:bg-purple-900 hover:text-gray-200 p-2'})
 
 
 class UserUpdateUsernameForm(forms.ModelForm):

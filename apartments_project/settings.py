@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     #  3rd party
     'django_q',
     'storages',
+    'crispy_forms',
+    'crispy_tailwind',
 
     #  apps
     'seller_profile',
@@ -140,3 +142,8 @@ LOGIN_URL = 'login'
 
 from .gmail_profile import *
 
+
+# crispy forms
+CRISPY_TEMPLATE_PACK = 'tailwind'
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"

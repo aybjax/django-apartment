@@ -7,52 +7,110 @@
 
 {% block body %}
 
-<div>
+<div class="flex justify-center pt-3 text-gray-800">
+    <div class="w-1/2 max-w-md flex flex-col items-center px-6
+                bg-purple-300
+                p-3
+                rounded-lg
+                border-2
+                border-black
+                ">
         {% for image in object.images.all %}
-            <img src="{{object.images.first.image.url}}" alt="apartment image" width="400" height="300">
+        <img src="{{object.images.first.image.url}}" alt="apartment image" width="400" height="300">
         {% endfor %}
-        <h3>
-            {{object.title}}
-        </h3>
 
-    <p>
-        {{object.description}}
-    </p>
-    <p>
-        price:
-        {{object.price}}
-    </p>
-    <p>
-        address:
-        {{object.street}} street {{object.home}} apt# {{object.apartment}}
-    </p>
-    <br/><br/>
-    <p>
-        owner:
-        <a href="{% url 'profile-detail' object.owner.user_extension.pk %}">
-            {{object.owner.user_extension.user.get_full_name}}
-        </a>
-    </p>
+        <div class="flex flex-row justify-between w-full my-2 p-2">
+            <div class="inline-block">
+                Title:
+            </div>
+            <h3 class="inline-block">
+                {{object.title}}
+            </h3>
+        </div>
 
-    <p>
-        <a href="{% url 'seller:apartment-list' %}?pk={{object.owner.pk}}">
-            get owner's apartments
+        <div class="w-full p-2">
+            <p>Description:</p>
+            <p class="text-gray-700 p-3 bg-gray-200 rounded-lg">
+                {{object.description}}
+            </p>
+        </div>
+
+        <div class="flex flex-row justify-between w-full my-2 p-2">
+            <div class="inline-block">
+                price:
+            </div>
+            <p class="inline-block">
+                ${{object.price}}
+            </p>
+        </div>
+        
+        <div class="flex flex-row justify-between w-full my-2 p-2">
+            <div class="inline-block">
+                address:
+            </div>
+            <div>
+                <p class="inline-block">
+                    {{object.street}} street {{object.home}} apt# {{object.apartment}}
+                </p>
+            </div>
+        </div>
+        
+        <a class="w-full" href="{% url 'profile-detail' object.owner.user_extension.pk %}">
+            <div class="flex flex-row justify-between w-full my-2 p-2
+                        hover:bg-purple-900
+                        hover:text-gray-200">
+                <div class="inline-block">
+                    owner:
+                </div>
+                <p class="inline-block">
+                    {{object.owner.user_extension.user.get_full_name}}
+                </p>
+            </div>
         </a>
-    </p>
-    <p>
-        <br/>
-        <a href="{% url 'seller:update-apartment' %}?pk={{object.pk}}">
-            update apartment
-        </a>
-    </p>
+
+        <div class="w-full text-center">
+            <a class="
+                inline-block
+                w-full
+                hover:bg-purple-900
+                hover:text-gray-200
+                p-2
+            "
+                href="{% url 'seller:apartment-list' %}?pk={{object.owner.pk}}">
+                get owner's apartments
+            </a>
+        </div>
+
+        <div class="w-full text-center p-2">
+            <a class="
+                inline-block
+                w-full
+                hover:bg-purple-900
+                hover:text-gray-200
+                p-2
+            "
+                href="{% url 'seller:update-apartment' %}?pk={{object.pk}}">
+                update apartment
+            </a>
+        </div>
+
+        <form method="post" action="{% url 'complaint' %}"
+            class="w-full text-center"
+        >
+        {% csrf_token %}
+        <input type="hidden" name="owner-user-id" value="{{object.owner.user_extension.user.pk}}">
+        <input type="hidden" name="apartment-id" value="{{object.pk}}">
+        <input
+            class="inline-block
+                w-full
+                bg-purple-300
+                hover:bg-purple-900
+                hover:text-gray-200
+                p-2"
+            type="submit" name="redirecting" value="complain">
+        </form>
+    </div>
 </div>
-
-<form method="post" action="{% url 'complaint' %}">
-    {% csrf_token %}
-    <input type="hidden" name="owner-user-id" value="{{object.owner.user_extension.user.pk}}">
-    <input type="hidden" name="apartment-id" value="{{object.pk}}">
-    <input type="submit" name="redirecting" value="complain">
-</form>
 
 {% endblock body %}
 

@@ -87,6 +87,7 @@ def updatePersonal(request: HttpRequest, *args, **kwargs) -> HttpResponse:
     elif request.method == 'GET':
         userForm = forms.UserUpdateFLI(instance=request.user)
         extensionForm = forms.UserExtendedUpdateFLI(instance=request.user.user_extension)
+        print(userForm)
 
     else:
         raise Http404
