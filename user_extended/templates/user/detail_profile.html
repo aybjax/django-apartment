@@ -10,7 +10,8 @@
 <h2>
     {{object.user.get_full_name}}'s account
 </h2>
-<img src="{{object.image.url}}" alt="Account image" width="200" height="250">
+<!-- <img src="{{object.image.url}}" alt="Account image" width="200" height="250"> -->
+<img src="{{ object.image.url }}" alt="Account image" width="200" height="250">
 <p>
     Username: {{object.user.username}}
 </p>

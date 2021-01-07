@@ -2,7 +2,7 @@ import json
 import re
 
 from django.db import models
-# from PIL import Image
+from PIL import Image
 from functions import sendSqs
 from functions.async_services import sendQueue_async
 from user_extended.models import Extension
@@ -74,22 +74,22 @@ class ApartmentImage(models.Model):
 
     def save(self):
         super().save()
-        obj_name = self.get_image_amazon_path()
-        msg = json.dumps({
-                'filename': obj_name,
-                'size':     400,
-        })
+        # obj_name = self.get_image_amazon_path() # commented for testing styling
+        # msg = json.dumps({
+        #         'filename': obj_name,
+        #         'size':     400,
+        # }) # commented for testing styling
 
-        sendQueue_async(msg, sendSqs.RESIZE_NAME, sendSqs.RESIZE_ATTR)
+        # sendQueue_async(msg, sendSqs.RESIZE_NAME, sendSqs.RESIZE_ATTR) # commented for testing styling
 
         # if obj_name:
-        #     main(obj_name)
+        #     main(obj_name) # commented for using bucket without lambda
 
-        # img = Image.open(self.image.path)
-        #
-        # if img.height > 400 or img.width > 300:
-        #     img.thumbnail((400, 300))
-        #     img.save(self.image.path)
+        img = Image.open(self.image.path) # commented for testing styling
+        
+        if img.height > 400 or img.width > 300:
+            img.thumbnail((400, 300))
+            img.save(self.image.path) # commented for testing styling
 
     def get_image_amazon_path(self):
         path_name = re.search(r'/(.+)\?', self.image.url).group(1)

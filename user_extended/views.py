@@ -44,7 +44,7 @@ def registerUser(request: HttpRequest, *args, **kwargs) -> HttpResponse:
             try:
                 ...
                 sendEmail(request, messages)
-                # sendAsyncEmail(request, messages)  # uncomment
+                # sendAsyncEmail(request, messages)  # commented for testing styling
             except Exception as e:
                 messages.error(request, e)
 

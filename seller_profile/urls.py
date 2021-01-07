@@ -9,7 +9,7 @@ urlpatterns = [
     path('register-apartment/', views.registerApartment, name='register-apartment'),
     path('apartments/<int:pk>/', views.ApartmentDetail.as_view(), name='apartment-detail'),
     path('update-apartment/', views.updateApartment, name='update-apartment'),
-    path('apartments/', views.ApartmentList.as_view(), name='apartment-list'),
-    re_path('', lambda *args, **kwargs: redirect(reverse('seller:apartment-list')),
-            name='catch-all'),
+    path('', views.ApartmentList.as_view(), name='apartment-list'),
+    # re_path('/', lambda *args, **kwargs: redirect(reverse('seller:apartment-list')),
+    #         name='catch-all'),
 ]
