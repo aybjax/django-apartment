@@ -1,56 +1,50 @@
-<ul>
-    <li style="display: inline">|</li>
-    <li style="display: inline">
-        <a href="{% url 'seller:apartment-list' %}">
+<ul class="flex mx-2 mt-0 bg-blue-400 rounded-lg">
+    <li>
+        <a class="py-3 px-3 rounded-l-lg text-gray-900 hover:bg-purple-700 hover:text-white inline-block" href="{% url 'seller:apartment-list' %}">
             all apartment
         </a>
     </li>
-    <li style="display: inline">|</li>
 
 
     {% if request.user.is_authenticated %}
-         <li style="display: inline">
-            <a href="{% url 'seller:apartment-list' %}?pk={{request.user.user_extension.seller.pk}}">
+        <li>
+            <a class="py-3 px-3 text-gray-900 hover:bg-purple-700 hover:text-white inline-block" href="{% url 'seller:apartment-list' %}?pk={{request.user.user_extension.seller.pk}}">
                 my apartment
             </a>
         </li>
-        <li style="display: inline">|</li>
     {% endif %}
 
+    <div class="ml-auto mr-auto"></div>
 
     {% if request.user.is_authenticated and request.user.user_extension %}
-         <li style="display: inline">
-            <a href="{% url 'profile-detail' request.user.user_extension.pk %}">
+        <li>
+            <a class="py-3 px-3 text-gray-900 hover:bg-purple-700 hover:text-white inline-block" href="{% url 'profile-detail' request.user.user_extension.pk %}">
                 my profile
             </a>
         </li>
-        <li style="display: inline">|</li>
     {% endif %}
 
     {% if request.user.is_authenticated %}
-        <li style="display: inline">
-            <a href="{% url 'logout' %}">
+        <li>
+            <a class="py-3 px-3 rounded-l-lg text-gray-900 hover:bg-purple-700 hover:text-white inline-block" href="{% url 'logout' %}">
                 logout
             </a>
         </li>
-        <li style="display: inline">|</li>
 
 
     {% else %}
-        <li style="display: inline">
-            <a href="{% url 'login' %}">
+        <li>
+            <a class="py-3 px-3 text-gray-900 hover:bg-purple-700 hover:text-white inline-block" href="{% url 'login' %}">
                 login
             </a>
         </li>
-        <li style="display: inline">|</li>
 
 
-        <li style="display: inline">
-            <a href="{% url 'register' %}">
+        <li>
+            <a class="py-3 px-3 rounded-r-lg text-gray-900 hover:bg-purple-700 hover:text-white inline-block" href="{% url 'register' %}">
                 register
             </a>
         </li>
-        <li style="display: inline">|</li>
 
     {% endif %}
 </ul>
