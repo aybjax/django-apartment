@@ -21,7 +21,8 @@ class="flex justify-center pt-3 text-gray-800"
 
     {% csrf_token %}
 
-        <div class="py-4 flex flex-col justify-between w-full my-2 p-2">
+        <div class="py-4 flex flex-col justify-between w-full my-2 p-2
+        ">
             {% load tailwind_filters %}
             {{form | crispy}}
             {{formExtension | crispy}}
